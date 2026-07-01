@@ -1,0 +1,27 @@
+name: Forward CSV Bot A ke Bot B
+
+on:
+  schedule:
+    # 06:15 WIB = 23:15 UTC (hari sebelumnya)
+    - cron: "15 23 * * *"
+  workflow_dispatch: {}   # biar bisa di-trigger manual buat testing
+
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install telethon
+
+      - run: python forward.py
+        env:
+          API_ID: ${{ secrets.API_ID }}
+          API_HASH: ${{ secrets.API_HASH }}
+          SESSION_STRING: ${{ secrets.SESSION_STRING }}
+          BOT_A_TARGET: ${{ secrets.BOT_A_TARGET }}
+          BOT_B_TARGET: ${{ secrets.BOT_B_TARGET }}
